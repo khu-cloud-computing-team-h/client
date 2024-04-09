@@ -2,7 +2,7 @@ import React from 'react';
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-const App = lazy(() => import('./App'));
+const Home = lazy(() => import('./pages/Home'));
 
 const router = createBrowserRouter([
   {
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <App />,
+        element: <Home />,
       },
       // {
       //   path: '/aa',
