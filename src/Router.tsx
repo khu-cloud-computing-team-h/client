@@ -1,11 +1,10 @@
 import React from 'react';
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import SignIn from './pages/SignIn';
-import AuthGoogle from './pages/AuthGoogle';
-import Layout from './Layout';
 
 const Home = lazy(() => import('./pages/Home'));
+const Layout = lazy(() => import('./Layout'));
+const AuthGoogle = lazy(() => import('./pages/AuthGoogle'));
 
 const router = createBrowserRouter([
   {
