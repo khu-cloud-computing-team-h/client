@@ -9,6 +9,10 @@ const Header = () => {
 
   const GoogleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_client_id}&redirect_uri=${redirect_uri}/google&response_type=code&scope=email profile`;
 
+  console.log('red', redirect_uri);
+  console.log('gl', google_client_id);
+  console.log('URL', GoogleURL);
+
   const handleGoogleLoginButton = () => {
     window.location.href = GoogleURL;
   };
