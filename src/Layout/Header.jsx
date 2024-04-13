@@ -4,6 +4,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@chakra-ui/react';
 
 const Header = () => {
+  const redirect_uri = import.meta.env.VITE_REDIRECT_URL;
+  const google_client_id = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  const GoogleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_client_id}&redirect_uri=${redirect_uri}/google&response_type=code&scope=email profile`;
+
+  const handleGoogleLoginButton = () => {
+    window.location.href = GoogleURL;
+  };
+
   const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
   const navigate = useNavigate();
 
@@ -22,8 +31,8 @@ const Header = () => {
       </Button>
       <Navigation>
         {!ACCESS_TOKEN && (
-          <Button colorScheme='green'>
-            <Link to='/sign-in'>로그인</Link>
+          <Button colorScheme='green' onClick={handleGoogleLoginButton}>
+            로그인
           </Button>
         )}
         {ACCESS_TOKEN && (
