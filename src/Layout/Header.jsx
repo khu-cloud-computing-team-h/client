@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@chakra-ui/react';
 
 const Header = () => {
@@ -13,13 +13,12 @@ const Header = () => {
   };
 
   const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
-  const navigate = useNavigate();
 
   const handleSignOut = () => {
     // await instance.post('/v1/user/log-out');
     localStorage.removeItem('ACCESS_TOKEN');
 
-    navigate('/');
+    window.location.reload();
   };
 
   return (
