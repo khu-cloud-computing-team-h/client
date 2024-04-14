@@ -19,13 +19,8 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/login/oauth2/code',
-    children: [
-      {
-        path: 'google',
-        element: <AuthGoogle />,
-      },
-    ],
+    path: '/login/oauth2/code/google',
+    element: <AuthGoogle />,
   },
 ]);
 
