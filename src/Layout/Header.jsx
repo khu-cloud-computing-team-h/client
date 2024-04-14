@@ -23,17 +23,21 @@ const Header = () => {
 
   return (
     <HeaderWrapper>
-      <Button colorScheme='blue'>
+      <Button size='lg' colorScheme='blue'>
         <Link to='/'>Home</Link>
       </Button>
       <Navigation>
         {!ACCESS_TOKEN && (
-          <Button colorScheme='green' onClick={handleGoogleLoginButton}>
+          <Button
+            size='lg'
+            colorScheme='green'
+            onClick={handleGoogleLoginButton}
+          >
             로그인
           </Button>
         )}
         {ACCESS_TOKEN && (
-          <Button colorScheme='pink' onClick={handleSignOut}>
+          <Button size='lg' colorScheme='pink' onClick={handleSignOut}>
             로그아웃
           </Button>
         )}
@@ -54,6 +58,11 @@ const HeaderWrapper = styled.header`
   width: 100vw;
   height: 7.6rem;
   padding: 0 3.5rem;
+
+  button {
+    font-size: 2rem;
+    padding: 2rem;
+  }
 `;
 
 const Navigation = styled.nav`
