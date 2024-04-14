@@ -16,11 +16,11 @@ const router = createBrowserRouter([
         index: true,
         element: <Home />,
       },
+      {
+        path: 'login/oauth2/code/google',
+        element: <AuthGoogle />,
+      },
     ],
-  },
-  {
-    path: '/login/oauth2/code/google',
-    element: <AuthGoogle />,
   },
 ]);
 
