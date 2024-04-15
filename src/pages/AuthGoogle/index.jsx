@@ -7,7 +7,7 @@ export default function AuthGoogle() {
   localStorage.setItem('ACCESS_TOKEN', googleCode);
 
   useEffect(() => {
-    navigate('/');
+    navigate('/success');
   }, [navigate]);
 
   return <div>로그인 중,,,</div>;

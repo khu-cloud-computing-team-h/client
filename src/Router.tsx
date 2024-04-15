@@ -2,6 +2,7 @@ import React from 'react';
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Error from './pages/Error';
+import LoginSuccess from './pages/LoginSuccess';
 
 const Home = lazy(() => import('./pages/Home'));
 const Layout = lazy(() => import('./Layout'));
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: 'login/oauth2/code/google',
         element: <AuthGoogle />,
+      },
+      {
+        path: 'success',
+        element: <LoginSuccess />,
       },
     ],
   },
