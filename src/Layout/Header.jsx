@@ -102,6 +102,7 @@ const Header = () => {
   const handleCreateFolder = (e) => {
     e.preventDefault();
     setFolder((prev) => [...prev, e.target[0].value]);
+    setFolderName('');
     onClose();
   };
 
@@ -158,6 +159,10 @@ const Header = () => {
                 type='text'
                 value={folderName}
                 onChange={handleFolderName}
+                pattern='[a-zA-Z0-9ㄱ-힣]*'
+                title='10자 이내의 숫자, 문자만 입력하세요.'
+                maxLength={10}
+                placeholder='10자 이내의 숫자, 문자만 입력하세요.'
               />
               {isError && (
                 <FormErrorMessage>필수 입력값 입니다.</FormErrorMessage>
