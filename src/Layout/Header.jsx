@@ -1,9 +1,26 @@
 import styled from '@emotion/styled';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@chakra-ui/react';
+import {
+  AlertDialog,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+  Box,
+  Button,
+  Image,
+  Input,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  useDisclosure,
+} from '@chakra-ui/react';
+
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useState } from 'react';
+import { useRef } from 'react';
 
 const arrayBufferToBlob = (arrayBuffer) => {
   const byteArray = new Uint8Array(arrayBuffer);
@@ -55,6 +72,10 @@ function MyDropzone({ onSetPreview }) {
 
 const Header = () => {
   const [preview, setPreview] = useState('none');
+  const [folderName, setFolderName] = useState('');
+  const [folder, setFolder] = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
 
   const redirect_uri = import.meta.env.VITE_REDIRECT_URL;
   const google_client_id = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -73,6 +94,18 @@ const Header = () => {
     localStorage.removeItem('ACCESS_TOKEN');
     navigate('/');
   };
+
+  const handleFolderName = (e) => {
+    setFolderName(e.target.value);
+  };
+
+  const handleCreateFolder = (e) => {
+    e.preventDefault();
+    setFolder((prev) => [...prev, e.target[0].value]);
+    onClose();
+  };
+
+  const isError = folderName === '';
 
   return (
     <>
@@ -100,8 +133,78 @@ const Header = () => {
       <DropzoneWrapper>
         <MyDropzone onSetPreview={setPreview} />
       </DropzoneWrapper>
+      <Button size='lg' colorScheme='teal' onClick={onOpen}>
+        Create Folder
+      </Button>
+      <AlertDialog
+        motionPreset='slideInBottom'
+        leastDestructiveRef={cancelRef}
+        onClose={() => {
+          setFolderName('');
+          onClose();
+        }}
+        isOpen={isOpen}
+        isCentered
+      >
+        <AlertDialogOverlay />
 
-      {preview !== 'none' && <img src={preview} alt='preview-image' />}
+        <AlertDialogContent>
+          <AlertDialogHeader>폴더를 생성하시겠습니까?</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <form onSubmit={handleCreateFolder}>
+            <FormControl isInvalid={isError} width='90%' margin='0 auto'>
+              <FormLabel>폴더 이름을 입력해주세요.</FormLabel>
+              <Input
+                type='text'
+                value={folderName}
+                onChange={handleFolderName}
+              />
+              {isError && (
+                <FormErrorMessage>필수 입력값 입니다.</FormErrorMessage>
+              )}
+            </FormControl>
+            <AlertDialogFooter>
+              <Button
+                ref={cancelRef}
+                onClick={() => {
+                  setFolderName('');
+                  onClose();
+                }}
+              >
+                No
+              </Button>
+              <Button type='submit' colorScheme='red' ml={3}>
+                Yes
+              </Button>
+            </AlertDialogFooter>
+          </form>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <FolderWrapper>
+        {folder?.map((pileName) => (
+          <>
+            <Folder to={`/${pileName}`}>
+              <Image
+                src='https://cdn-icons-png.freepik.com/512/5994/5994710.png'
+                alt='folder image'
+                width='100px'
+                height='100px'
+              />
+              <p>{pileName}</p>
+            </Folder>
+          </>
+        ))}
+        {preview !== 'none' && (
+          <Image
+            cursor='pointer'
+            width='100px'
+            height='100px'
+            src={preview}
+            alt='preview-image'
+          />
+        )}
+      </FolderWrapper>
     </>
   );
 };
@@ -144,5 +247,20 @@ const DropzoneWrapper = styled.section`
     width: 100%;
     height: 20rem;
     font-size: 2rem;
+  }
+`;
+
+const FolderWrapper = styled.div`
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+`;
+
+const Folder = styled(Link)`
+  width: 10rem;
+  height: 10rem;
+
+  p {
+    text-align: center;
   }
 `;

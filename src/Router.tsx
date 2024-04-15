@@ -2,11 +2,12 @@ import React from 'react';
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-const Home = lazy(() => import('./pages/Home'));
+const AuthGoogle = lazy(() => import('./pages/AuthGoogle'));
 const Error = lazy(() => import('./pages/Error'));
+const Home = lazy(() => import('./pages/Home'));
 const Layout = lazy(() => import('./Layout'));
 const LoginSuccess = lazy(() => import('./pages/LoginSuccess'));
-const AuthGoogle = lazy(() => import('./pages/AuthGoogle'));
+const NewFolder = lazy(() => import('./pages/NewFolder'));
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: 'success',
         element: <LoginSuccess />,
+      },
+      {
+        path: ':folderName',
+        element: <NewFolder />,
       },
     ],
   },
