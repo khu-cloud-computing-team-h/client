@@ -3,25 +3,43 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@chakra-ui/react';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useState } from 'react';
 
-function MyDropzone() {
-  const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
+const arrayBufferToBlob = (arrayBuffer) => {
+  const byteArray = new Uint8Array(arrayBuffer);
+  return new Blob([byteArray], { type: 'image/jpeg' }); // 혹은 다른 이미지 타입에 맞게 수정
+};
 
-    acceptedFiles.forEach((file) => {
-      const reader = new FileReader();
+function MyDropzone({ onSetPreview }) {
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      acceptedFiles.forEach((file) => {
+        const reader = new FileReader();
 
-      reader.onabort = () => console.log('file reading was aborted');
-      reader.onerror = () => console.log('file reading has failed');
-      reader.onload = () => {
-        // Do whatever you want with the file contents
-        const binaryStr = reader.result;
-        console.log(binaryStr);
-      };
-      reader.readAsArrayBuffer(file);
-    });
-  }, []);
+        reader.onabort = () => console.log('file reading was aborted');
+        reader.onerror = () => console.log('file reading has failed');
+        reader.onload = () => {
+          // 이미지 데이터를 Blob으로 변환
+          const blob = arrayBufferToBlob(reader.result);
+          // Blob URL 생성
+          const previewUrl = URL.createObjectURL(blob);
+          onSetPreview(previewUrl);
+          // Do whatever you want with the file contents
+        };
+        reader.readAsArrayBuffer(file);
+      });
+    },
+    [onSetPreview]
+  );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  // const {
+  //   getRootProps,
+  //   getInputProps,
+  // } = useDropzone({
+  //   accept: {
+  //     "image/*": [".jpeg", ".jpg", ".png"],
+  //   },
+  // });
 
   return (
     <div {...getRootProps()}>
@@ -36,6 +54,8 @@ function MyDropzone() {
 }
 
 const Header = () => {
+  const [preview, setPreview] = useState('none');
+
   const redirect_uri = import.meta.env.VITE_REDIRECT_URL;
   const google_client_id = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -78,8 +98,10 @@ const Header = () => {
         </Navigation>
       </HeaderWrapper>
       <DropzoneWrapper>
-        <MyDropzone />
+        <MyDropzone onSetPreview={setPreview} />
       </DropzoneWrapper>
+
+      {preview !== 'none' && <img src={preview} alt='preview-image' />}
     </>
   );
 };
