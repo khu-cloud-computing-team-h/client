@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import styled from '@emotion/styled';
 
-export default function Layout() {
+export default function MainLayout() {
   return (
     <>
       <Header />

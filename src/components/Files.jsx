@@ -7,7 +7,7 @@ export default function Files({ preview, folder }) {
     <FolderWrapper>
       {folder?.map((pileName) => (
         <>
-          <Folder to={`/${pileName}`}>
+          <Folder to={`/success/${pileName}`}>
             <Image
               src='https://cdn-icons-png.freepik.com/512/5994/5994710.png'
               alt='folder image'

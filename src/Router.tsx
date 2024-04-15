@@ -1,18 +1,20 @@
 import React from 'react';
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+import MainLayout from './Layout/MainLayout';
 
 const AuthGoogle = lazy(() => import('./pages/AuthGoogle'));
 const Error = lazy(() => import('./pages/Error'));
 const Home = lazy(() => import('./pages/Home'));
-const Layout = lazy(() => import('./Layout'));
+const HomeLayout = lazy(() => import('./Layout/HomeLayout'));
+const Layout = lazy(() => import('./Layout/MainLayout'));
 const LoginSuccess = lazy(() => import('./pages/LoginSuccess'));
 const NewFolder = lazy(() => import('./pages/NewFolder'));
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: <HomeLayout />,
     errorElement: <Error />,
     children: [
       {
@@ -23,8 +25,15 @@ const router = createBrowserRouter([
         path: 'login/oauth2/code/google',
         element: <AuthGoogle />,
       },
+    ],
+  },
+  {
+    path: '/success',
+    element: <MainLayout />,
+    errorElement: <Error />,
+    children: [
       {
-        path: 'success',
+        index: true,
         element: <LoginSuccess />,
       },
       {
