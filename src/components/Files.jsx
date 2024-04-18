@@ -5,16 +5,16 @@ import { Link } from 'react-router-dom';
 export default function Files({ preview, folder }) {
   return (
     <FolderWrapper>
-      {folder?.map((pileName) => (
+      {folder?.map(({ folderName, path }) => (
         <>
-          <Folder to={`/success/${pileName}`}>
+          <Folder to={path}>
             <Image
               src='https://cdn-icons-png.freepik.com/512/5994/5994710.png'
               alt='folder image'
               width='100px'
               height='100px'
             />
-            <p>{pileName}</p>
+            <p>{folderName}</p>
           </Folder>
         </>
       ))}

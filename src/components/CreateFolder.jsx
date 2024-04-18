@@ -14,8 +14,11 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function CreateFolder({ onSetFolder }) {
+  const { pathname } = useLocation();
+
   const [folderName, setFolderName] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
@@ -25,7 +28,13 @@ export default function CreateFolder({ onSetFolder }) {
 
   const handleCreateFolder = (e) => {
     e.preventDefault();
-    onSetFolder((prev) => [...prev, e.target[0].value]);
+    onSetFolder((prev) => [
+      ...prev,
+      {
+        folderName: e.target[0].value,
+        path: `${pathname}/${e.target[0].value}`,
+      },
+    ]);
     setFolderName('');
     onClose();
   };
@@ -34,6 +43,7 @@ export default function CreateFolder({ onSetFolder }) {
 
   return (
     <>
+      <p>{pathname}</p>
       <Button size='lg' colorScheme='teal' onClick={onOpen}>
         Create Folder
       </Button>
