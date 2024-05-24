@@ -9,10 +9,13 @@ export default function AuthGoogle() {
   console.log(googleCode);
 
   const { mutate } = useMutation({
+    mutationKey: ['sign-in'],
     mutationFn: async () => {
-      await signInInstance.post('/auth/code/google', {
+      const response = await signInInstance.post('/auth/code/google', {
         googleCode: googleCode,
       });
+
+      return response;
     },
     onSuccess: (data) => {
       console.log(data);
