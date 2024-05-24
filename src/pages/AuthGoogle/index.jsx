@@ -12,7 +12,7 @@ export default function AuthGoogle() {
     mutationKey: ['sign-in'],
     mutationFn: async () => {
       const response = await signInInstance.post('/auth/code/google', {
-        googleCode: googleCode,
+        code: googleCode,
       });
 
       return response;
