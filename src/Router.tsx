@@ -8,7 +8,7 @@ const Error = lazy(() => import('./pages/Error'));
 const Home = lazy(() => import('./pages/Home'));
 const HomeLayout = lazy(() => import('./Layout/HomeLayout'));
 const Layout = lazy(() => import('./Layout/MainLayout'));
-const LoginSuccess = lazy(() => import('./pages/LoginSuccess'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 const NewFolder = lazy(() => import('./pages/NewFolder'));
 
 const router = createBrowserRouter([
@@ -28,13 +28,13 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/success',
+    path: '/dashboard',
     element: <MainLayout />,
     errorElement: <Error />,
     children: [
       {
         index: true,
-        element: <LoginSuccess />,
+        element: <Dashboard />,
       },
       {
         path: ':folderName',

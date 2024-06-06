@@ -1,4 +1,4 @@
 /** 로그인 성공 페이지 */
-export default function LoginSuccess() {
+export default function Dashboard() {
   return <></>;
 }

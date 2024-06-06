@@ -18,7 +18,7 @@ export default function AuthGoogle() {
     },
     onSuccess: (data) => {
       localStorage.setItem('ACCESS_TOKEN', data.data.access_token);
-      navigate('/success');
+      navigate('/dashboard');
     },
   });
 
