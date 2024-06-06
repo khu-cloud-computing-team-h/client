@@ -18,8 +18,7 @@ export default function AuthGoogle() {
       return response;
     },
     onSuccess: (data) => {
-      console.log(data);
-      localStorage.setItem('ACCESS_TOKEN', googleCode);
+      localStorage.setItem('ACCESS_TOKEN', data.data.access_token);
       navigate('/success');
     },
   });
