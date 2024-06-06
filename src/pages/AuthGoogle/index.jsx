@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 export default function AuthGoogle() {
   const navigate = useNavigate();
   const googleCode = new URL(window.location.href).searchParams.get('code');
-  console.log(googleCode);
 
   const { mutate } = useMutation({
     mutationKey: ['sign-in'],
