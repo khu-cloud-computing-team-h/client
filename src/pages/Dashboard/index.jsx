@@ -24,11 +24,14 @@ export default function Dashboard() {
   console.log(data);
   return (
     <Container>
-      {data?.map((url, idx) => (
-        <Wrapper key={`${url}-${idx}`}>
-          <img src={url} width={300} height={300} />
-        </Wrapper>
-      ))}
+      {data
+        ?.slice()
+        .reverse()
+        .map((url, idx) => (
+          <Wrapper key={`${url}-${idx}`}>
+            <img src={url} width={300} height={300} />
+          </Wrapper>
+        ))}
     </Container>
   );
 }
