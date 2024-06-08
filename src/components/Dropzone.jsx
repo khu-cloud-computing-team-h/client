@@ -2,6 +2,8 @@ import styled from '@emotion/styled';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import instance from '../apis/instance';
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '../App';
 
 const arrayBufferToBlob = (arrayBuffer) => {
   const byteArray = new Uint8Array(arrayBuffer);
@@ -9,6 +11,19 @@ const arrayBufferToBlob = (arrayBuffer) => {
 };
 
 function MyDropzone({ onSetPreview }) {
+  const mutation = useMutation({
+    mutationFn: (formData) => {
+      return instance.post('/manage/image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getData'] });
+    },
+  });
+
   const onDrop = useCallback(
     (acceptedFiles) => {
       acceptedFiles.forEach((file) => {
@@ -26,11 +41,7 @@ function MyDropzone({ onSetPreview }) {
           formData.append('imageFile', file);
 
           try {
-            await instance.post('/manage/image', formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            });
+            mutation.mutate(formData);
           } catch (err) {
             console.error(err);
           }
