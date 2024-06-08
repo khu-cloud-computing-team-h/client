@@ -57,6 +57,8 @@ const HeaderWrapper = styled.header`
   width: 100vw;
   height: 7.6rem;
   padding: 0 3.5rem;
+  background-color: white;
+  z-index: 100;
 
   button {
     font-size: 2rem;
