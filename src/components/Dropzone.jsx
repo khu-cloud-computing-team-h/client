@@ -5,11 +5,6 @@ import instance from '../apis/instance';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../App';
 
-const arrayBufferToBlob = (arrayBuffer) => {
-  const byteArray = new Uint8Array(arrayBuffer);
-  return new Blob([byteArray], { type: 'image/jpeg' }); // 혹은 다른 이미지 타입에 맞게 수정
-};
-
 function MyDropzone() {
   const { mutate, isPending } = useMutation({
     mutationFn: (formData) => {
