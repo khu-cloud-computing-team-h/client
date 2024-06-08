@@ -10,8 +10,8 @@ const arrayBufferToBlob = (arrayBuffer) => {
   return new Blob([byteArray], { type: 'image/jpeg' }); // 혹은 다른 이미지 타입에 맞게 수정
 };
 
-function MyDropzone({ onSetPreview }) {
-  const mutation = useMutation({
+function MyDropzone() {
+  const { mutate } = useMutation({
     mutationFn: (formData) => {
       return instance.post('/manage/image', formData, {
         headers: {
@@ -24,34 +24,26 @@ function MyDropzone({ onSetPreview }) {
     },
   });
 
-  const onDrop = useCallback(
-    (acceptedFiles) => {
-      acceptedFiles.forEach((file) => {
-        const reader = new FileReader();
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader();
 
-        reader.onabort = () => console.log('file reading was aborted');
-        reader.onerror = () => console.log('file reading has failed');
-        reader.onload = async () => {
-          // 이미지 데이터를 Blob으로 변환
-          const blob = arrayBufferToBlob(reader.result);
-          // Blob URL 생성
-          const previewUrl = URL.createObjectURL(blob);
-          onSetPreview(previewUrl);
-          const formData = new FormData();
-          formData.append('imageFile', file);
+      reader.onabort = () => console.log('file reading was aborted');
+      reader.onerror = () => console.log('file reading has failed');
+      reader.onload = async () => {
+        const formData = new FormData();
+        formData.append('imageFile', file);
 
-          try {
-            mutation.mutate(formData);
-          } catch (err) {
-            console.error(err);
-          }
-        };
+        try {
+          mutate(formData);
+        } catch (err) {
+          console.error(err);
+        }
+      };
 
-        reader.readAsArrayBuffer(file);
-      });
-    },
-    [onSetPreview]
-  );
+      reader.readAsArrayBuffer(file);
+    });
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   // const {
@@ -75,10 +67,10 @@ function MyDropzone({ onSetPreview }) {
   );
 }
 
-export default function Dropzone({ onSetPreview }) {
+export default function Dropzone() {
   return (
     <DropzoneWrapper>
-      <MyDropzone onSetPreview={onSetPreview} />
+      <MyDropzone />
     </DropzoneWrapper>
   );
 }
