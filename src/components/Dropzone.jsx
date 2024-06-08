@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import instance from '../apis/instance';
 
 const arrayBufferToBlob = (arrayBuffer) => {
   const byteArray = new Uint8Array(arrayBuffer);
@@ -15,14 +16,26 @@ function MyDropzone({ onSetPreview }) {
 
         reader.onabort = () => console.log('file reading was aborted');
         reader.onerror = () => console.log('file reading has failed');
-        reader.onload = () => {
+        reader.onload = async () => {
           // 이미지 데이터를 Blob으로 변환
           const blob = arrayBufferToBlob(reader.result);
           // Blob URL 생성
           const previewUrl = URL.createObjectURL(blob);
           onSetPreview(previewUrl);
-          // Do whatever you want with the file contents
+          const formData = new FormData();
+          formData.append('imageFile', file);
+
+          try {
+            await instance.post('/manage/image', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+          } catch (err) {
+            console.error(err);
+          }
         };
+
         reader.readAsArrayBuffer(file);
       });
     },
