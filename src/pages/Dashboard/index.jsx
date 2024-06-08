@@ -20,8 +20,9 @@ export default function Dashboard() {
 
       return res.data;
     },
+    staleTime: 1000 * 60 * 60 * 60,
   });
-  console.log(data);
+
   return (
     <Container>
       {data

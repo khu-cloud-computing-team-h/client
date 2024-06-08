@@ -11,7 +11,7 @@ const arrayBufferToBlob = (arrayBuffer) => {
 };
 
 function MyDropzone() {
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (formData) => {
       return instance.post('/manage/image', formData, {
         headers: {
@@ -56,14 +56,20 @@ function MyDropzone() {
   // });
 
   return (
-    <div {...getRootProps()}>
-      <input {...getInputProps()} />
-      {isDragActive ? (
-        <p>Drop the files here ...</p>
-      ) : (
-        <p>Drag &apos;n&apos; drop some files here, or click to select files</p>
-      )}
-    </div>
+    <>
+      <Container {...getRootProps()}>
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <p>Drop the files here ...</p>
+        ) : isPending ? (
+          <p style={{ textAlign: 'center' }}>sending an Image file...</p>
+        ) : (
+          <p>
+            Drag &apos;n&apos; drop some files here, or click to select files
+          </p>
+        )}
+      </Container>
+    </>
   );
 }
 
@@ -88,5 +94,11 @@ const DropzoneWrapper = styled.section`
     width: 100%;
     height: 20rem;
     font-size: 2rem;
+  }
+`;
+
+const Container = styled.div`
+  p {
+    font-size: 40px;
   }
 `;
