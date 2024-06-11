@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import instance from '../../apis/instance';
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 
 /** 로그인 성공 페이지 */
 export default function Dashboard() {
@@ -23,27 +24,27 @@ export default function Dashboard() {
     staleTime: 1000 * 60 * 60 * 60,
   });
 
-  // const { dataImage } = useQuery({
-  //   queryKey: ['getImageData'],
-  //   queryFn: async () => {
-  //     const res = await instance.get(`/manage/image-data/14`);
+  const { data: dataImage } = useQuery({
+    queryKey: ['getImageData'],
+    queryFn: async () => {
+      const res = await instance.get(`/manage/image-data`);
 
-  //     return res;
-  //   },
-  // });
-
-  // console.log(dataImage);
+      return res.data.results.map(({ ImageID }) => ImageID).reverse();
+    },
+  });
 
   return (
     <Container>
       {data
         ?.slice()
         .reverse()
-        .map((url, idx) => (
-          <Wrapper key={`${url}-${idx}`}>
-            <img src={url} width={300} height={300} />
-          </Wrapper>
-        ))}
+        .map((url, idx) => {
+          return (
+            <Wrapper to={`${dataImage[idx]}`} key={`${url}-${idx}`}>
+              <img src={url} width={300} height={300} />
+            </Wrapper>
+          );
+        })}
       {data?.length === 0 && (
         <p
           style={{
@@ -67,7 +68,7 @@ const Container = styled.section`
   gap: 50px;
 `;
 
-const Wrapper = styled.article`
+const Wrapper = styled(Link)`
   border: 1px solid black;
   height: 300px;
   display: flex;
