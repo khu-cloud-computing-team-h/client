@@ -42,7 +42,6 @@ export default function ImageDetail() {
     <Section>
       <img src={image} alt='image' width={500} height={500} />
       <Article>
-        <p>이름: {123}</p>
         <p>
           업로드 시간: {datePart} {timePart}
         </p>
