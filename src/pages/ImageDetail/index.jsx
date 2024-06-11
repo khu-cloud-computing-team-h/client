@@ -1,10 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import instance from '../../apis/instance';
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
+import { queryClient } from '../../App';
 
 /** 디테일 페이지 */
 export default function ImageDetail() {
+  const navigate = useNavigate();
   const { imageID } = useParams();
 
   const { data: image, isLoading: isImageLoading } = useQuery({
@@ -25,6 +28,17 @@ export default function ImageDetail() {
     },
   });
 
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      await instance.delete(`/manage/image/${imageID}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getData'] });
+      queryClient.invalidateQueries({ queryKey: 'getImageData' });
+      navigate('/dashboard');
+    },
+  });
+
   if (isImageLoading || isImageDataLoading) {
     return <p>Loading...</p>;
   }
@@ -37,6 +51,10 @@ export default function ImageDetail() {
 
   const datePart = date?.toISOString().split('T')[0];
   const timePart = date?.toTimeString().split(' ')[0];
+
+  const handleDeleteImage = () => {
+    mutate();
+  };
 
   return (
     <Section>
@@ -54,7 +72,7 @@ export default function ImageDetail() {
           </Tags>
         </TagsContainer>
       </Article>
-      <DeleteButton>삭제하기</DeleteButton>
+      <DeleteButton onClick={handleDeleteImage}>삭제하기</DeleteButton>
     </Section>
   );
 }
