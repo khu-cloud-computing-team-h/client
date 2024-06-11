@@ -16,6 +16,7 @@ function MyDropzone() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getData'] });
+      queryClient.invalidateQueries({ queryKey: ['getImageData'] });
     },
   });
 
