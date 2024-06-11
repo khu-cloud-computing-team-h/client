@@ -49,9 +49,9 @@ export default function ImageDetail() {
         <TagsContainer>
           <span>태그: </span>
           <Tags>
-            {['imageData', 'whichOne']?.map((tag) => (
-              <Tag key={tag}>{tag}</Tag>
-            ))}
+            {(imageData?.Tags?.length !== 0 &&
+              imageData.Tags.map((tag) => <Tag key={tag}>{tag}</Tag>)) ||
+              '없음'}
           </Tags>
         </TagsContainer>
       </Article>
