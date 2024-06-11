@@ -23,6 +23,17 @@ export default function Dashboard() {
     staleTime: 1000 * 60 * 60 * 60,
   });
 
+  // const { dataImage } = useQuery({
+  //   queryKey: ['getImageData'],
+  //   queryFn: async () => {
+  //     const res = await instance.get(`/manage/image-data/14`);
+
+  //     return res;
+  //   },
+  // });
+
+  // console.log(dataImage);
+
   return (
     <Container>
       {data
@@ -33,6 +44,16 @@ export default function Dashboard() {
             <img src={url} width={300} height={300} />
           </Wrapper>
         ))}
+      {data?.length === 0 && (
+        <p
+          style={{
+            textAlign: 'center',
+            fontSize: '46px',
+          }}
+        >
+          No Data
+        </p>
+      )}
     </Container>
   );
 }
