@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 /** 로그인 성공 페이지 */
 export default function Dashboard() {
-  const { data: id } = useQuery({
+  const { data: id, isLoading: isIdLoading } = useQuery({
     queryKey: ['firstData'],
     queryFn: async () => {
       const res = await instance.get('/auth/token');
@@ -14,7 +14,7 @@ export default function Dashboard() {
     },
   });
 
-  const { data } = useQuery({
+  const { data, isLoading: isImageLoading } = useQuery({
     queryKey: ['getData'],
     queryFn: async () => {
       const res = await instance.get(`/manage/image`);
@@ -24,7 +24,7 @@ export default function Dashboard() {
     staleTime: 1000 * 60 * 60 * 60,
   });
 
-  const { data: dataImage } = useQuery({
+  const { data: dataImage, isLoading: isImageDataLoading } = useQuery({
     queryKey: ['getImageData'],
     queryFn: async () => {
       const res = await instance.get(`/manage/image-data`);
@@ -33,10 +33,14 @@ export default function Dashboard() {
     },
   });
 
+  if (isIdLoading || isImageLoading || isImageDataLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <Container>
       {data
-        ?.slice()
+        .slice()
         .reverse()
         .map((url, idx) => {
           return (
@@ -45,7 +49,7 @@ export default function Dashboard() {
             </Wrapper>
           );
         })}
-      {data?.length === 0 && (
+      {data.length === 0 && (
         <p
           style={{
             textAlign: 'center',
