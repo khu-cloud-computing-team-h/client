@@ -16,5 +16,5 @@ export default function MainLayout() {
 const Main = styled.main`
   max-width: 179.2rem;
   margin: 0 auto;
-  margin-top: 7.6rem;
+  margin: 7.6rem 0;
 `;
