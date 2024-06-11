@@ -54,6 +54,7 @@ export default function ImageDetail() {
           </Tags>
         </TagsContainer>
       </Article>
+      <DeleteButton>삭제하기</DeleteButton>
     </Section>
   );
 }
@@ -91,4 +92,21 @@ const Tag = styled.span`
   border-radius: 15px;
   padding: 3px 5px;
   text-align: center;
+`;
+
+const DeleteButton = styled.button`
+  background-color: red;
+  color: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  text-align: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: darkred;
+  }
+
+  &:active {
+    background-color: red;
+  }
 `;
