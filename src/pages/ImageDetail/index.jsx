@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import instance from '../../apis/instance';
+import styled from '@emotion/styled';
 
 /** 디테일 페이지 */
 export default function ImageDetail() {
@@ -38,20 +39,57 @@ export default function ImageDetail() {
   const timePart = date?.toTimeString().split(' ')[0];
 
   return (
-    <section>
-      <img src={image} alt='image' width={300} height={300} />
-      <article>
+    <Section>
+      <img src={image} alt='image' width={500} height={500} />
+      <Article>
         <p>이름: {123}</p>
         <p>
           업로드 시간: {datePart} {timePart}
         </p>
-        <p>
+        <TagsContainer>
           <span>태그: </span>
-          {imageData?.Tags?.map((tag) => (
-            <span key={tag}>{tag}</span>
-          ))}
-        </p>
-      </article>
-    </section>
+          <Tags>
+            {['imageData', 'whichOne']?.map((tag) => (
+              <Tag key={tag}>{tag}</Tag>
+            ))}
+          </Tags>
+        </TagsContainer>
+      </Article>
+    </Section>
   );
 }
+
+const Section = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+`;
+
+const Article = styled.article`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+`;
+
+const TagsContainer = styled.p`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+const Tags = styled.span`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+
+const Tag = styled.span`
+  border: 1px solid black;
+  border-radius: 15px;
+  padding: 3px 5px;
+  text-align: center;
+`;
