@@ -9,7 +9,7 @@ const Home = lazy(() => import('./pages/Home'));
 const HomeLayout = lazy(() => import('./Layout/HomeLayout'));
 const Layout = lazy(() => import('./Layout/MainLayout'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
-const NewFolder = lazy(() => import('./pages/NewFolder'));
+const ImageDetail = lazy(() => import('./pages/ImageDetail'));
 
 const router = createBrowserRouter([
   {
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
       },
       {
         path: ':imageID',
-        element: <NewFolder />,
+        element: <ImageDetail />,
       },
     ],
   },
