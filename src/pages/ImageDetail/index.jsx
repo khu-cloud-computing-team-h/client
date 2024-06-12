@@ -24,7 +24,7 @@ export default function ImageDetail() {
     queryFn: async () => {
       const res = await instance.get(`/manage/image-data/${imageID}`);
 
-      return res.data;
+      return res.data.data[0];
     },
   });
 
