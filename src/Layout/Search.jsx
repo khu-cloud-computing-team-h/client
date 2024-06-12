@@ -1,7 +1,20 @@
 import styled from '@emotion/styled';
 import instance from '../apis/instance';
+import { useState } from 'react';
 
 export default function Search({ onSearch }) {
+  const [suggests, setSuggests] = useState(['dlrj', 'dl']);
+  const handleChange = async (e) => {
+    e.preventDefault();
+    const tag = e.target.value.replace(/\s/g, '').split(',');
+    const res = await instance.get(
+      `/search/auto-complete?input=${tag[tag.length - 1]}`
+    );
+
+    console.log(res.data.suggestKeywords);
+    setSuggests(res.data.suggestKeywords);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (e.target[0].value === '') {
@@ -22,12 +35,16 @@ export default function Search({ onSearch }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Input
-        type='text'
-        placeholder='반드시 태그를 ,를 이용하여 구분해주세요. (ex. 만화, 몸짓, 미술). 입력이 완료되면 엔터키를 눌러주세요.'
-      />
-    </form>
+    <>
+      <form onChange={handleChange} onSubmit={handleSubmit}>
+        <Input
+          type='text'
+          placeholder='반드시 태그를 ,를 이용하여 구분해주세요. (ex. 만화, 몸짓, 미술). 입력이 완료되면 엔터키를 눌러주세요.'
+        />
+      </form>
+      {suggests.length !== 0 &&
+        suggests.map((item, idx) => <span key={`${idx}-${item}`}>{item}</span>)}
+    </>
   );
 }
 
