@@ -3,7 +3,7 @@ import instance from '../apis/instance';
 import { useState } from 'react';
 
 export default function Search({ onSearch }) {
-  const [suggests, setSuggests] = useState(['dlrj', 'dl']);
+  const [suggests, setSuggests] = useState([]);
   const handleChange = async (e) => {
     e.preventDefault();
     const tag = e.target.value.replace(/\s/g, '').split(',');
@@ -11,7 +11,6 @@ export default function Search({ onSearch }) {
       `/search/auto-complete?input=${tag[tag.length - 1]}`
     );
 
-    console.log(res.data.suggestKeywords);
     setSuggests(res.data.suggestKeywords);
   };
 
@@ -42,8 +41,14 @@ export default function Search({ onSearch }) {
           placeholder='반드시 태그를 ,를 이용하여 구분해주세요. (ex. 만화, 몸짓, 미술). 입력이 완료되면 엔터키를 눌러주세요.'
         />
       </form>
-      {suggests.length !== 0 &&
-        suggests.map((item, idx) => <span key={`${idx}-${item}`}>{item}</span>)}
+      {suggests.length !== 0 && (
+        <Suggests>
+          <span>추천 태그 : </span>
+          {suggests.map((item, idx) => (
+            <Suggest key={`${idx}-${item}`}>{item}</Suggest>
+          ))}
+        </Suggests>
+      )}
     </>
   );
 }
@@ -60,4 +65,19 @@ const Input = styled.input`
   &::placeholder {
     color: gray;
   }
+`;
+
+const Suggests = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const Suggest = styled.span`
+  border: 1px solid black;
+  border-radius: 15px;
+  padding: 3px 5px;
+  text-align: center;
 `;
