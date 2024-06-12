@@ -38,7 +38,7 @@ export default function Search({ onSearch }) {
       <form onChange={handleChange} onSubmit={handleSubmit}>
         <Input
           type='text'
-          placeholder='반드시 태그를 ,를 이용하여 구분해주세요. (ex. 만화, 몸짓, 미술). 입력이 완료되면 엔터키를 눌러주세요.'
+          placeholder='태그를 검색해보세요. 반드시 태그를 ,를 이용하여 구분해주세요. (ex. 만화, 몸짓, 미술). 입력이 완료되면 엔터키를 눌러주세요.'
         />
       </form>
       {suggests.length !== 0 && (
