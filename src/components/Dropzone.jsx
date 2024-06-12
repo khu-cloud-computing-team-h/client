@@ -49,7 +49,6 @@ function MyDropzone() {
           formData.append('imageFile', file);
 
           try {
-            console.log(formData);
             const imageIdData = await imageUploadMutate(formData);
             const arr = imageIdData.data.split(' ');
             const imageId = arr[arr.length - 1];
