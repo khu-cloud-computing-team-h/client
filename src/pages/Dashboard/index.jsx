@@ -2,9 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import instance from '../../apis/instance';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { DataContext } from '../../Layout/MainLayout';
 
 /** 로그인 성공 페이지 */
 export default function Dashboard() {
+  const { data: searchedDataId, isSearch } = useContext(DataContext);
+
   const { data: id, isLoading: isIdLoading } = useQuery({
     queryKey: ['firstData'],
     queryFn: async () => {
@@ -32,23 +36,58 @@ export default function Dashboard() {
     },
   });
 
-  if (isIdLoading || isImageLoading || isImageDataLoading) {
+  const { data: searchedData, isLoading: isSearchedDataLoading } = useQuery({
+    queryKey: ['searchedData', searchedDataId],
+    queryFn: async () => {
+      const responses = await Promise.all(
+        searchedDataId.map((id) => instance.get(`/manage/image/${id}`))
+      );
+      return responses.map((res) => res.data);
+    },
+    enabled: searchedDataId.length > 0,
+  });
+
+  if (
+    isIdLoading ||
+    isImageLoading ||
+    isImageDataLoading ||
+    isSearchedDataLoading
+  ) {
     return <p>Loading...</p>;
   }
 
   return (
     <Container>
-      {data
-        .slice()
-        .reverse()
-        .map((url, idx) => {
-          return (
-            <Wrapper to={`${dataImage[idx]}`} key={`${url}-${idx}`}>
-              <img src={url} width={300} height={300} />
-            </Wrapper>
-          );
-        })}
+      <></>
+      {searchedData == undefined &&
+        !isSearch &&
+        data
+          .slice()
+          .reverse()
+          .map((url, idx) => {
+            return (
+              <Wrapper to={`${dataImage[idx]}`} key={`${url}-${idx}`}>
+                <img src={url} width={300} height={300} />
+              </Wrapper>
+            );
+          })}
       {data.length === 0 && (
+        <p
+          style={{
+            textAlign: 'center',
+            fontSize: '46px',
+          }}
+        >
+          No Data
+        </p>
+      )}
+      {searchedData?.length !== 0 &&
+        searchedData?.map((data, idx) => (
+          <Wrapper to={`${searchedDataId[idx]}`} key={`${searchedDataId[idx]}`}>
+            <img src={data} width={300} height={300} alt={`Image ${idx}`} />
+          </Wrapper>
+        ))}
+      {isSearch && searchedDataId?.length === 0 && (
         <p
           style={{
             textAlign: 'center',

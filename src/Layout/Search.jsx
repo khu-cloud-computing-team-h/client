@@ -1,12 +1,16 @@
 import styled from '@emotion/styled';
 import instance from '../apis/instance';
 
-export default function Search() {
+export default function Search({ onSearch }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (e.target[0].value === '') {
+      onSearch({ data: [], isSearch: false });
+      return;
+    }
+
     const tags = e.target[0].value.replace(/\s/g, '').split(',');
     const queryString = tags.map((tag) => `keywords=${tag}`).join('&');
-    console.log(queryString);
 
     const res = await instance.get(`/search/tag?${queryString}`, {
       params: {
@@ -14,7 +18,7 @@ export default function Search() {
       },
     });
 
-    console.log(res.data.imageIds);
+    onSearch({ data: res.data.imageIds, isSearch: true });
   };
 
   return (

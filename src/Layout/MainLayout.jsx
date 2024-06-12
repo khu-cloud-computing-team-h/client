@@ -3,18 +3,26 @@ import Header from './Header';
 import styled from '@emotion/styled';
 import Search from './Search';
 import { useParams } from 'react-router-dom';
+import { createContext } from 'react';
+import { useState } from 'react';
+
+export const DataContext = createContext();
 
 export default function MainLayout() {
   const { imageID } = useParams();
+  const [searchedData, setSearchedData] = useState({
+    data: [],
+    isSearch: false,
+  });
 
   return (
-    <>
+    <DataContext.Provider value={searchedData}>
       <Header />
-      {!imageID && <Search />}
+      {!imageID && <Search onSearch={setSearchedData} />}
       <Main>
         <Outlet />
       </Main>
-    </>
+    </DataContext.Provider>
   );
 }
 
