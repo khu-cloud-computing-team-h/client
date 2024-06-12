@@ -6,40 +6,62 @@ import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../App';
 
 function MyDropzone() {
-  const { mutate, isPending } = useMutation({
-    mutationFn: (formData) => {
-      return instance.post('/manage/image', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+  const { mutate: imageUploadMutate, isPending: isImageUploadPending } =
+    useMutation({
+      mutationFn: (formData) => {
+        return instance.post('/manage/image', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['getData'] });
+        queryClient.invalidateQueries({ queryKey: ['getImageData'] });
+      },
+    });
+
+  const { mutate: createTagsMutate, isPending: isCreateTagsPending } =
+    useMutation({
+      mutationFn: (formData) => {
+        return instance.post('/vision/tags/detect', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      },
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({ queryKey: ['getData'] });
+        queryClient.invalidateQueries({ queryKey: ['getImageData'] });
+      },
+    });
+
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      acceptedFiles.forEach((file) => {
+        const reader = new FileReader();
+
+        reader.onabort = () => console.log('file reading was aborted');
+        reader.onerror = () => console.log('file reading has failed');
+        reader.onload = async () => {
+          const formData = new FormData();
+
+          formData.append('imageFile', file);
+
+          try {
+            console.log(formData);
+            imageUploadMutate(formData);
+            createTagsMutate(formData);
+          } catch (err) {
+            console.error(err);
+          }
+        };
+
+        reader.readAsArrayBuffer(file);
       });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getData'] });
-      queryClient.invalidateQueries({ queryKey: ['getImageData'] });
-    },
-  });
-
-  const onDrop = useCallback((acceptedFiles) => {
-    acceptedFiles.forEach((file) => {
-      const reader = new FileReader();
-
-      reader.onabort = () => console.log('file reading was aborted');
-      reader.onerror = () => console.log('file reading has failed');
-      reader.onload = async () => {
-        const formData = new FormData();
-        formData.append('imageFile', file);
-
-        try {
-          mutate(formData);
-        } catch (err) {
-          console.error(err);
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
-    });
-  }, []);
+    [imageUploadMutate, createTagsMutate]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   // const {
@@ -57,7 +79,7 @@ function MyDropzone() {
         <input {...getInputProps()} />
         {isDragActive ? (
           <p>Drop the files here ...</p>
-        ) : isPending ? (
+        ) : isImageUploadPending || isCreateTagsPending ? (
           <p style={{ textAlign: 'center' }}>sending an Image file...</p>
         ) : (
           <p>
