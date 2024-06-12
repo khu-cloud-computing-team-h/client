@@ -34,7 +34,7 @@ export default function ImageDetail() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getData'] });
-      queryClient.invalidateQueries({ queryKey: 'getImageData' });
+      queryClient.invalidateQueries({ queryKey: ['getImageData'] });
       navigate('/dashboard');
     },
   });
