@@ -4,11 +4,13 @@ import instance from '../../apis/instance';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from '../../App';
+import { useState } from 'react';
 
 /** 디테일 페이지 */
 export default function ImageDetail() {
   const navigate = useNavigate();
   const { imageID } = useParams();
+  const [showInput, setShowInput] = useState(false);
 
   const { data: image, isLoading: isImageLoading } = useQuery({
     queryKey: ['getOneImage'],
@@ -39,6 +41,15 @@ export default function ImageDetail() {
     },
   });
 
+  const { mutate: updateTagsMutate } = useMutation({
+    mutationFn: async (tags) => {
+      await instance.patch(`/manage/image/${imageID}/tags`, tags);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getImageDetail'] });
+    },
+  });
+
   if (isImageLoading || isImageDataLoading) {
     return <p>Loading...</p>;
   }
@@ -51,6 +62,17 @@ export default function ImageDetail() {
 
   const datePart = date?.toISOString().split('T')[0];
   const timePart = date?.toTimeString().split(' ')[0];
+
+  const handleShowInput = () => {
+    setShowInput(true);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const arr = e.target[0].value.replace(/\s/g, '').split(',');
+    updateTagsMutate(arr);
+    setShowInput(false);
+  };
 
   const handleDeleteImage = () => {
     mutate();
@@ -72,6 +94,18 @@ export default function ImageDetail() {
           </Tags>
         </TagsContainer>
       </Article>
+      <ModifyTagsButton onClick={handleShowInput}>
+        tag 수정하기
+      </ModifyTagsButton>
+      {showInput && (
+        <form onSubmit={handleSubmit}>
+          <TagInput
+            type='text'
+            placeholder='반드시 태그를 ,를 이용하여 구분해주세요. (ex. 만화, 몸짓, 미술)'
+          />
+          <SubmitInput type='submit' />
+        </form>
+      )}
       <DeleteButton onClick={handleDeleteImage}>삭제하기</DeleteButton>
     </Section>
   );
@@ -111,6 +145,52 @@ const Tag = styled.span`
   border-radius: 15px;
   padding: 3px 5px;
   text-align: center;
+`;
+
+const ModifyTagsButton = styled.button`
+  background-color: blue;
+  color: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  text-align: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: darkblue;
+  }
+
+  &:active {
+    background-color: blue;
+  }
+`;
+
+const TagInput = styled.input`
+  width: 830px;
+  border: 1px solid black;
+  padding: 10px 20px;
+  border-radius: 10px;
+
+  &::placeholder {
+    color: gray;
+  }
+`;
+
+const SubmitInput = styled.input`
+  background-color: green;
+  color: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  text-align: center;
+  transition: all 0.2s ease;
+  margin-left: 10px;
+
+  &:hover {
+    background-color: yellowgreen;
+  }
+
+  &:active {
+    background-color: green;
+  }
 `;
 
 const DeleteButton = styled.button`
