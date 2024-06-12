@@ -103,6 +103,7 @@ const Tags = styled.span`
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-shrink: 0;
 `;
 
 const Tag = styled.span`
