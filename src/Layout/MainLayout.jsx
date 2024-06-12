@@ -1,11 +1,13 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import styled from '@emotion/styled';
+import Search from './Search';
 
 export default function MainLayout() {
   return (
     <>
       <Header />
+      <Search />
       <Main>
         <Outlet />
       </Main>
