@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../App';
 
 function MyDropzone() {
-  const { mutate: imageUploadMutate, isPending: isImageUploadPending } =
+  const { mutateAsync: imageUploadMutate, isPending: isImageUploadPending } =
     useMutation({
       mutationFn: (formData) => {
         return instance.post('/manage/image', formData, {
@@ -21,7 +21,7 @@ function MyDropzone() {
       },
     });
 
-  const { mutate: createTagsMutate, isPending: isCreateTagsPending } =
+  const { mutateAsync: createTagsMutate, isPending: isCreateTagsPending } =
     useMutation({
       mutationFn: (formData) => {
         return instance.post('/vision/tags/detect', formData, {
@@ -30,7 +30,7 @@ function MyDropzone() {
           },
         });
       },
-      onSuccess: (data) => {
+      onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['getData'] });
         queryClient.invalidateQueries({ queryKey: ['getImageData'] });
       },
@@ -50,8 +50,18 @@ function MyDropzone() {
 
           try {
             console.log(formData);
-            imageUploadMutate(formData);
-            createTagsMutate(formData);
+            const imageIdData = await imageUploadMutate(formData);
+            const arr = imageIdData.data.split(' ');
+            const imageId = arr[arr.length - 1];
+
+            await createTagsMutate(formData);
+            const res = await instance.get('/vision/tags');
+            const tags = res.data.tags;
+
+            await instance.post('/manage/image/upload/tags', {
+              imageId,
+              tags,
+            });
           } catch (err) {
             console.error(err);
           }
