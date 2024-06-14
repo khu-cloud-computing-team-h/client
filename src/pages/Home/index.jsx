@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('ACCESS_TOKEN');
+  const accessToken = sessionStorage.getItem('ACCESS_TOKEN');
 
   useEffect(() => {
     if (accessToken) {

@@ -13,12 +13,12 @@ export default function Navigation() {
     window.location.href = GoogleURL;
   };
 
-  const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
+  const ACCESS_TOKEN = sessionStorage.getItem('ACCESS_TOKEN');
   const navigate = useNavigate();
 
   const handleSignOut = () => {
     // await instance.post('/v1/user/log-out');
-    localStorage.removeItem('ACCESS_TOKEN');
+    sessionStorage.removeItem('ACCESS_TOKEN');
     navigate('/');
   };
 

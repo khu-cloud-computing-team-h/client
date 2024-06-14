@@ -20,7 +20,7 @@ export default instance;
 
 instance.interceptors.request.use(
   (config) => {
-    const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
+    const ACCESS_TOKEN = sessionStorage.getItem('ACCESS_TOKEN');
 
     if (!ACCESS_TOKEN) {
       window.location.href = '/';
