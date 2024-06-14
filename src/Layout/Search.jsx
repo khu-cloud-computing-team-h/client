@@ -1,17 +1,27 @@
 import styled from '@emotion/styled';
 import instance from '../apis/instance';
 import { useState } from 'react';
+import { useRef } from 'react';
 
 export default function Search({ onSearch }) {
+  const timerRef = useRef(null);
   const [suggests, setSuggests] = useState([]);
+
   const handleChange = async (e) => {
     e.preventDefault();
     const tag = e.target.value.replace(/\s/g, '').split(',');
-    const res = await instance.get(
-      `/search/auto-complete?input=${tag[tag.length - 1]}`
-    );
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
 
-    setSuggests(res.data.suggestKeywords);
+    // Set a new timer
+    timerRef.current = setTimeout(async () => {
+      const res = await instance.get(
+        `/search/auto-complete?input=${tag[tag.length - 1]}`
+      );
+
+      setSuggests(res.data.suggestKeywords);
+    }, 150);
   };
 
   const handleSubmit = async (e) => {
