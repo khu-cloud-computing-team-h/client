@@ -41,8 +41,8 @@ function MyDropzone() {
       acceptedFiles.forEach((file) => {
         const reader = new FileReader();
 
-        reader.onabort = () => console.log('file reading was aborted');
-        reader.onerror = () => console.log('file reading has failed');
+        reader.onabort = () => {};
+        reader.onerror = () => console.error('file reading has failed');
         reader.onload = async () => {
           const formData = new FormData();
 
