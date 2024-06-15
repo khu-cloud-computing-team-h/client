@@ -6,25 +6,20 @@ import { useRef } from 'react';
 export default function Search({ onSearch }) {
   const timerRef = useRef(null);
   const [suggests, setSuggests] = useState([]);
-  const [value, setValue] = useState('');
   const [error, setError] = useState('');
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     e.preventDefault();
     const newValue = e.target.value;
     const koreanRegex = /^[가-힣,]*$/; // 한글과 콤마만 허용하는 정규 표현식
 
     if (koreanRegex.test(newValue)) {
-      setValue(newValue);
       setError('');
     } else {
       setError('한글만 입력가능합니다.');
     }
-  };
 
-  const handleFormChange = async (e) => {
-    e.preventDefault();
-    const tag = e.target.value.replace(/\s/g, '').split(',');
+    const tag = newValue.replace(/\s/g, '').split(',');
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
@@ -60,12 +55,9 @@ export default function Search({ onSearch }) {
 
   return (
     <>
-      <Form onChange={handleFormChange} onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Input
-          pattern='^[가-힣,]*$'
-          title='한글만 입력가능합니다.'
           type='text'
-          value={value}
           onChange={handleChange}
           placeholder='태그를 검색해보세요. 반드시 태그를 ,를 이용하여 구분해주세요. (ex. 만화, 몸짓, 미술). 입력이 완료되면 엔터키를 눌러주세요.'
         />
