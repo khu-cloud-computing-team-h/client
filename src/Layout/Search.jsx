@@ -17,6 +17,7 @@ export default function Search({ onSearch }) {
       setError('');
     } else {
       setError('한글과 쉼표만 입력가능합니다.');
+      return;
     }
 
     const tag = newValue.replace(/\s/g, '').split(',');

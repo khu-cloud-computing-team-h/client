@@ -86,6 +86,10 @@ export default function ImageDetail() {
     if (inputValue === '') {
       return;
     }
+    const koreanRegex = /^[가-힣ㄱ-ㅎㅏ-ㅣ\s,]*$/;
+    if (!koreanRegex.test(inputValue)) {
+      return;
+    }
     const arr = inputValue.replace(/\s/g, '').split(',');
     updateTagsMutate(arr);
     setShowInput(false);
