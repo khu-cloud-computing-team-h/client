@@ -16,12 +16,12 @@ export default function ImageDetail() {
   const handleChange = (e) => {
     e.preventDefault();
     const newValue = e.target.value;
-    const koreanRegex = /^[가-힣,]*$/; // 한글과 콤마만 허용하는 정규 표현식
+    const koreanRegex = /^[가-힣ㄱ-ㅎㅏ-ㅣ,]*$/; // 한글과 콤마만 허용하는 정규 표현식
 
     if (koreanRegex.test(newValue)) {
       setError('');
     } else {
-      setError('한글만 입력가능합니다.');
+      setError('한글과 쉼표만 입력가능합니다.');
     }
   };
 
