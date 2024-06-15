@@ -57,7 +57,7 @@ function MyDropzone() {
             const res = await instance.get('/vision/tags');
             const tagsWithSpace = res.data.tags;
             const tags = tagsWithSpace
-              .filter((tag) => !/[a-zA-Z]/.test(tag))
+              .filter((tag) => /^[가-힣\s]+$/.test(tag))
               .map((tag) => tag.replace(/\s+/g, ''));
 
             await instance.post('/manage/image/upload/tags', {
