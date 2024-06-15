@@ -10,6 +10,7 @@ export default function Search({ onSearch }) {
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
+    e.preventDefault();
     const newValue = e.target.value;
     const koreanRegex = /^[가-힣,]*$/; // 한글과 콤마만 허용하는 정규 표현식
 
@@ -21,7 +22,7 @@ export default function Search({ onSearch }) {
     }
   };
 
-  const handleChange = async (e) => {
+  const handleFormChange = async (e) => {
     e.preventDefault();
     const tag = e.target.value.replace(/\s/g, '').split(',');
     if (timerRef.current) {
@@ -59,7 +60,7 @@ export default function Search({ onSearch }) {
 
   return (
     <>
-      <Form onChange={handleChange} onSubmit={handleSubmit}>
+      <Form onChange={handleFormChange} onSubmit={handleSubmit}>
         <Input
           pattern='^[가-힣,]*$'
           title='한글만 입력가능합니다.'
