@@ -24,9 +24,11 @@ export default function Navigation() {
 
   return (
     <HeaderWrapper>
-      <Button size='lg' colorScheme='blue'>
-        <Link to='/'>Home</Link>
-      </Button>
+      <Link to='/'>
+        <Button size='lg' colorScheme='blue'>
+          Home
+        </Button>
+      </Link>
       <Nav>
         {!ACCESS_TOKEN && (
           <Button
