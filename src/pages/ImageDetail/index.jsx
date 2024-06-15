@@ -11,6 +11,20 @@ export default function ImageDetail() {
   const navigate = useNavigate();
   const { imageID } = useParams();
   const [showInput, setShowInput] = useState(false);
+  const [value, setValue] = useState('');
+  const [error, setError] = useState('');
+
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    const koreanRegex = /^[가-힣,]*$/; // 한글과 콤마만 허용하는 정규 표현식
+
+    if (koreanRegex.test(newValue)) {
+      setValue(newValue);
+      setError('');
+    } else {
+      setError('한글만 입력가능합니다.');
+    }
+  };
 
   const { data: image, isLoading: isImageLoading } = useQuery({
     queryKey: ['getOneImage'],
@@ -98,18 +112,30 @@ export default function ImageDetail() {
         tag 수정하기
       </ModifyTagsButton>
       {showInput && (
-        <form onSubmit={handleSubmit}>
-          <TagInput
-            type='text'
-            placeholder='반드시 태그를 ,를 이용하여 구분해주세요. (ex. 만화, 몸짓, 미술)'
-          />
-          <SubmitInput type='submit' />
-        </form>
+        <Form onSubmit={handleSubmit}>
+          <div>
+            <TagInput
+              type='text'
+              value={value}
+              onChange={handleChange}
+              placeholder='태그를 검색해보세요. 반드시 태그를 ,를 이용하여 구분해주세요. (ex. 만화, 몸짓, 미술). 입력이 완료되면 엔터키를 눌러주세요.'
+            />
+            <SubmitInput type='submit' />
+          </div>
+          {error && <div style={{ color: 'red' }}>{error}</div>}
+        </Form>
       )}
       <DeleteButton onClick={handleDeleteImage}>삭제하기</DeleteButton>
     </Section>
   );
 }
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+`;
 
 const Section = styled.section`
   display: flex;
