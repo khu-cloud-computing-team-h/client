@@ -11,7 +11,7 @@ export default function Search({ onSearch }) {
   const handleChange = async (e) => {
     e.preventDefault();
     const newValue = e.target.value;
-    const koreanRegex = /^[가-힣ㄱ-ㅎㅏ-ㅣ,]*$/; // 한글과 콤마만 허용하는 정규 표현식
+    const koreanRegex = /^[가-힣ㄱ-ㅎㅏ-ㅣ\s,]*$/; // 한글과 콤마만 허용하는 정규 표현식
 
     if (koreanRegex.test(newValue)) {
       setError('');
