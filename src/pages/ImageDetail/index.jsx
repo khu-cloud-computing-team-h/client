@@ -82,7 +82,11 @@ export default function ImageDetail() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const arr = e.target[0].value.replace(/\s/g, '').split(',');
+    const inputValue = e.target[0].value.trim();
+    if (inputValue === '') {
+      return;
+    }
+    const arr = inputValue.replace(/\s/g, '').split(',');
     updateTagsMutate(arr);
     setShowInput(false);
   };
