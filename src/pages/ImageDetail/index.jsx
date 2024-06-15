@@ -15,6 +15,7 @@ export default function ImageDetail() {
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
+    e.preventDefault();
     const newValue = e.target.value;
     const koreanRegex = /^[가-힣,]*$/; // 한글과 콤마만 허용하는 정규 표현식
 
