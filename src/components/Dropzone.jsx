@@ -55,7 +55,8 @@ function MyDropzone() {
 
             await createTagsMutate(formData);
             const res = await instance.get('/vision/tags');
-            const tags = res.data.tags;
+            const tagsWithSpace = res.data.tags;
+            const tags = tagsWithSpace.map((tag) => tag.replace(/\s+/g, ''));
 
             await instance.post('/manage/image/upload/tags', {
               imageId,
