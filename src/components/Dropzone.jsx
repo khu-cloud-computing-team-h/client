@@ -72,7 +72,12 @@ function MyDropzone() {
     [imageUploadMutate, createTagsMutate]
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': ['.jpeg', '.jpg', '.png'],
+    },
+  });
   // const {
   //   getRootProps,
   //   getInputProps,
