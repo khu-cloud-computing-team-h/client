@@ -16,7 +16,7 @@ export default function Search({ onSearch }) {
     if (koreanRegex.test(newValue)) {
       setError('');
     } else {
-      setError('한글과 쉼표만 입력가능합니다.');
+      setError('태그는 한글로만 존재합니다.');
       return;
     }
 
